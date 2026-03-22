@@ -1,11 +1,16 @@
-from flask import Flask, render_template
-import os
+from flask import request
+from twilio.twiml.messaging_response import MessagingResponse
 
-app = Flask(__name__)
+@app.route("/whatsapp", methods=["POST"])
+def whatsapp():
+    msg = request.values.get('Body', '').lower()
+    
+    resp = MessagingResponse()
+    reply = resp.message()
 
-@app.route("/")
-def inicio():
-    return render_template("login.html")
+    reply.body("Hola Juan, tu bot ya funciona 🚀")
+
+    return str(resp)
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
