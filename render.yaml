@@ -1,6 +1,14 @@
+<<<<<<< HEAD
 services:
   - type: web
     name: aula-virtual-juan
     env: python
     buildCommand: ""
+=======
+services:
+  - type: web
+    name: aula-virtual-juan
+    env: python
+    buildCommand: ""
+>>>>>>> b1d3ec79d31bfbc8cabf105f911d29b2add333e5
     startCommand: gunicorn app:app
