@@ -1,29 +1,40 @@
-<<<<<<< HEAD
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, session
+import os
 
 app = Flask(__name__)
+app.secret_key = "clave_secreta"
+
+# USUARIO DE PRUEBA
+usuario_db = {
+    "juan": "1234"
+}
 
 @app.route("/")
-def inicio():
+def home():
     return render_template("login.html")
 
-app.run(debug=True)
-=======
-from flask import request
-from twilio.twiml.messaging_response import MessagingResponse
+@app.route("/login", methods=["POST"])
+def login():
+    usuario = request.form["usuario"]
+    password = request.form["password"]
 
-@app.route("/whatsapp", methods=["POST"])
-def whatsapp():
-    msg = request.values.get('Body', '').lower()
-    
-    resp = MessagingResponse()
-    reply = resp.message()
+    if usuario in usuario_db and usuario_db[usuario] == password:
+        session["usuario"] = usuario
+        return redirect("/dashboard")
+    else:
+        return "Credenciales incorrectas ❌"
 
-    reply.body("Hola Juan, tu bot ya funciona 🚀")
+@app.route("/dashboard")
+def dashboard():
+    if "usuario" in session:
+        return render_template("dashboard.html", usuario=session["usuario"])
+    else:
+        return redirect("/")
 
-    return str(resp)
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/")
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
->>>>>>> b1d3ec79d31bfbc8cabf105f911d29b2add333e5
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
