@@ -15,8 +15,11 @@ def home():
 
 @app.route("/login", methods=["POST"])
 def login():
-    usuario = request.form["usuario"]
-    password = request.form["password"]
+    usuario = request.form.get("usuario")
+    password = request.form.get("password")
+
+    print("Usuario:", usuario)
+    print("Password:", password)
 
     if usuario in usuario_db and usuario_db[usuario] == password:
         session["usuario"] = usuario
