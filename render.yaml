@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: aula-virtual-juan
+    env: python
+    buildCommand: ""
+    startCommand: gunicorn app:app
